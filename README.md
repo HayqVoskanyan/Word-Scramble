@@ -12,7 +12,7 @@
 
 ### Demo Screeshots
 
-![VAST Desktop Demo](./img.png "Desktop Demo")
+![VAST Desktop Demo](./cover.jpg "Desktop Demo")
 
 ### Prerequisites
 

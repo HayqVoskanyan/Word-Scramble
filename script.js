@@ -1,7 +1,6 @@
 const root = document.querySelector('#root');
 const startGames = document.querySelector('#startGames');
-const startGames2 = document.querySelector('.startGames2');
-let fruitName = [
+let fructName = [
     {
         id: 1,
         label: "Orange",
@@ -139,12 +138,12 @@ let fruitName = [
     },
     {
         id: 28,
-        label: "Passion",
+        label: "Passion Fruit",
         hint: "A tropical fruit with a wrinkled skin and tangy seeds."
     },
     {
         id: 29,
-        label: "Dragon",
+        label: "Dragon Fruit",
         hint: "A vibrant fruit with pink skin and white flesh dotted with seeds."
     },
     {
@@ -178,52 +177,27 @@ let fruitName = [
         hint: "A long, dark berry with a sweet flavor."
     }
 ];
-let counter=document.querySelector('.counter')
-const time=60
-let currentTime=time
-let interval
 
 function randomArray(value, way = 'array') {
     if (way === 'string') {
         let orgName = value.join('').toLowerCase();
-        let newName = value.sort(() => Math.random() - 0.5).join('').toLowerCase()
+        let newName = value.sort(() => Math.random() - 0.5).join('').toLowerCase();
         if (orgName === newName) {
             return randomArray(value, 'string')
         }
         return newName
     }
-    return value.sort(() => Math.random() - 0.5);
+    return value.sort(() => Math.random() - 0.5)
 }
 
 
-startGames.onclick = function (){
-    newGame()
-    startTimer()
-
-}
-
-function startTimer(){
-if (interval){
-    clearInterval(interval)
-}
-
-interval = setInterval(() => {
-    counter.innerHTML = currentTime
-    currentTime--
-
-    if (currentTime === 0) {
-        clearInterval(interval)
-        alert("Game Over")
-    }
-}, 1000)
-}
-
-const config = {
-    count: 5
-}
+startGames.onclick = newGame
 
 function newGame() {
-    fruitName = randomArray(fruitName)
+    const currentTime=10
+    let interval
+    const stepGame=5
+    fructName = randomArray(fructName)
     let i = 0
     let score = {
         success: 0,
@@ -237,165 +211,155 @@ function newGame() {
     root.appendChild(gamesTable);
 
     let myCard = document.createElement('div');
-    myCard.setAttribute('class', "card bg-light text-dark text-center");
-    myCard.innerHTML = `  <h4 class="card-title">Word Scramble</h4>`
+
+
+    myCard.setAttribute('class', 'card bg-light text-dark text-center');
+    myCard.innerHTML = `<h4 class="card-title">Word Scramble</h4>`
     let new_scrambled_letters = document.createElement('div');
-    new_scrambled_letters.setAttribute('class', "scrambled-letters");
-    new_scrambled_letters.innerHTML = randomArray(fruitName[i].label.split(""), 'string');
-    myCard.appendChild(new_scrambled_letters)
+    new_scrambled_letters.setAttribute('class', 'scrambled-letters');
+    new_scrambled_letters.innerHTML = randomArray(fructName[i].label.split(''), 'string');
+    myCard.appendChild(new_scrambled_letters);
 
     let new_hint = document.createElement('div');
-    new_hint.innerHTML = fruitName[i].hint
+    new_hint.innerHTML = fructName[i].hint;
     new_hint.classList.add('hint');
-    myCard.appendChild(new_hint)
+    myCard.appendChild(new_hint);
 
+
+    let newTimer=document.createElement('div');
+    newTimer.innerHTML=currentTime
+    newTimer.setAttribute('class', 'newTimer');
+    myCard.appendChild(newTimer);
+
+    let new_question_step = document.createElement('div');
+    new_question_step.innerHTML = "1/"+stepGame
+    new_question_step.classList.add('hint');
+    myCard.appendChild(new_question_step);
     let new_form_group_dv = document.createElement('div');
-    new_form_group_dv.setAttribute('class', "form-group ");
+    new_form_group_dv.setAttribute('class', 'form-group');
+    new_form_group_dv.innerHTML=`<div class="alert alert-danger d-none errorMsg" role="alert">
+  Fill in the fields correctly
+</div>`
+    let new_input = document.createElement('input');
+    new_input.setAttribute('type', 'text');
+    new_input.setAttribute('placeholder', 'Enter a valid word');
+    new_input.setAttribute('class', 'form-control');
+    new_form_group_dv.appendChild(new_input);
+    myCard.appendChild(new_form_group_dv);
 
-    new_form_group_dv.innerHTML = `<div class="alert alert-danger d-none myValue" role="alert">Required!! Empty field</div>`
 
-
-    let newInput = document.createElement('input');
-    newInput.setAttribute('type', 'text');
-    newInput.setAttribute('placeholder', 'Enter a valid word');
-    newInput.setAttribute('class', 'form-control ');
-    new_form_group_dv.appendChild(newInput)
-    myCard.appendChild(new_form_group_dv)
     let new_btn_group_dv = document.createElement('div');
-    new_btn_group_dv.setAttribute('class', "d-flex justify-content-between");
-    // ___refresh button start______
+    new_btn_group_dv.setAttribute('class', 'd-flex justify-content-between');
+    myCard.appendChild(new_btn_group_dv);
+    //------------refresh button start---------
     let new_refresh_btn = document.createElement('button');
     new_refresh_btn.setAttribute('class', 'btn btn-secondary btn-custom');
-    new_refresh_btn.innerHTML = `Refresh Word`
-    new_btn_group_dv.appendChild(new_refresh_btn)
-    // ___refresh button end______
-    // Check button start______
+    new_refresh_btn.innerHTML = 'Refresh Word'
+    new_btn_group_dv.appendChild(new_refresh_btn);
+    //--------------refresh button end---------
+    // Check button start-----------
     let new_check_btn = document.createElement('button');
-    new_check_btn.setAttribute('class', 'btn btn-primary  btn-custom');
-    new_check_btn.innerHTML = `Check Word`
-    new_btn_group_dv.appendChild(new_check_btn)
-    // Check button end______
-
-    let new_question_count = document.createElement('div');
-
-    new_question_count.classList.add('hint');
-    new_question_count.innerHTML = "1/" + config.count
-    myCard.appendChild(new_question_count)
-
-
+    new_check_btn.setAttribute('class', "btn btn-primary btn-custom");
+    new_check_btn.innerHTML = 'Check Word'
+    new_btn_group_dv.appendChild(new_check_btn);
+    // Check button end------------
     myCard.appendChild(new_btn_group_dv)
-
-
     gamesTable.appendChild(myCard);
 
+    function timerAction(){
+        clearInterval(interval)
+        let myTime=currentTime
+        interval= setInterval(()=>{
+            myTime--
+            newTimer.innerHTML=myTime
+            if (myTime===0){
+                clearInterval(interval);
+                score.wrong++
+                i++
+                if (i === stepGame) {
+                    console.log('Game Over')
+                    GameOver(score)
+                    return
+                }
+                newWord()
+                timerAction()
 
+            }
+        },1000)
+    }
+    timerAction()
     new_refresh_btn.onclick = function () {
-
+        console.log('new_refresh_btn');
         score.refresh++
-        fruitName = randomArray(fruitName)
+        fructName = randomArray(fructName)
         newWord()
-        // i++
-        // if (i === config.count) {
-        //     console.log("Game Over")
-        //     GameOver(score)
-        //     return
-        // }
     }
     new_check_btn.onclick = function () {
-        // if (!errors()){
-        //     return;
-        // }
-        // errors(true)
-        let value = newInput.value.trim()
-        let current = fruitName[i].label.trim()
-
-        if (!validate(value, current)) {
+        clearInterval(interval)
+        if(!Validate(new_input.value)){
+            console.log('break')
             return;
         }
 
-
-        if (current.toLowerCase() === value.toLowerCase()) {
+        if (fructName[i].label.toLowerCase() === new_input.value.toLowerCase()) {
             score.success++
         } else {
             score.wrong++
         }
-        newInput.value = ''
+        new_input.value = ''
         i++
-        if (i === config.count) {
-            console.log("Game Over")
+        if (i === stepGame) {
+            console.log('Game Over')
             GameOver(score)
             return
         }
-
+        newTimer.innerHTML=currentTime
+        timerAction()
         newWord()
 
     }
+    function Validate(value){
+        let errorMsg=document.querySelector('.errorMsg')
+        if(value.length>1){
+            errorMsg.classList.add('d-none')
+            return true
+        }else{
+            errorMsg.classList.remove('d-none')
+            return false
+        }
+        // errorMsg
 
+    }
     function newWord() {
-        new_scrambled_letters.innerHTML = randomArray(fruitName[i].label.split(""), 'string');
-        new_hint.innerHTML = fruitName[i].hint
-        new_question_count.innerHTML = i + 1 + "/" + config.count
+        new_scrambled_letters.innerHTML = randomArray(fructName[i].label.split(''), 'string');
+        new_hint.innerHTML = fructName[i].hint;
+        new_question_step.innerHTML = i+1+"/"+stepGame
     }
 
 }
 
 function GameOver(score) {
-
-    let gamesTable = document.querySelector('.gamesTable')
+    let gamesTable = document.querySelector('.gamesTable');
     gamesTable.innerHTML = ''
-    let myScor = document.createElement('div')
-    myScor.setAttribute('class', "card bg-light text-dark text-center");
-    gamesTable.appendChild(myScor)
-    myScor.innerHTML = `
-
-                <ul  class="list-group">
-                    <li  class="list-group-item d-flex justify-content-between align-items-center">
-                    Success <span class="badge badge-primary badge-pill">${score.success}</span></li>
-                    <li  class="list-group-item d-flex justify-content-between align-items-center">
-                    Wrong <span class="badge badge-danger badge-pill">${score.wrong}</span></li>
-                    <li  class="list-group-item d-flex justify-content-between align-items-center">
-                    Refresh  <span class="badge badge-warning badge-pill">${score.refresh}</span></li>
-                </ul>
-     
-    `
-
+    let myCard = document.createElement('div');
+    myCard.setAttribute('class', 'card bg-light text-dark text-center game-over');
+    myCard.innerHTML = `<h4 class="card-title">Game Over</h4>`
+    gamesTable.appendChild(myCard)
+    myCard.innerHTML += `
+            <ul  class="list-group my-2">
+               <li class="list-group-item list-group-item-success">Success: ${score.success}</li>
+               <li class="list-group-item list-group-item-danger">Wrong: ${score.wrong}</li>
+                 <li class="list-group-item list-group-item-info">Refresh: ${score.refresh}</li>
+            </ul>
+            `
     let newStart = document.createElement('button');
-    newStart.setAttribute('class','btn btn-primary')
-    newStart.innerHTML = `Start Game`
-    myScor.appendChild(newStart)
-
+    newStart.setAttribute('class', 'btn btn-primary btn-custom');
+    newStart.innerHTML = 'Start Game'
+    myCard.appendChild(newStart);
 
     newStart.onclick = function () {
         gamesTable.remove()
         newGame()
     }
+
 }
-
-function validate(value, current) {
-    let myValue = document.querySelector('.myValue')
-    if (value.length === current.length) {
-        myValue.classList.add('d-none')
-        return true
-    } else if (value.length === 0) {
-        myValue.classList.remove('d-none')
-        myValue.innerHTML = "Empty word...."
-        return false;
-    } else if (value.length > current.length) {
-        myValue.classList.remove('d-none')
-        myValue.innerHTML = `your text long ${value.length} then current answer length is ${current.length}`
-        return false;
-    } else if (value.length < current.length) {
-        myValue.classList.remove('d-none')
-        myValue.innerHTML = `your text short ${value.length} then current answer length is ${current.length}`
-        return false;
-
-    }
-}
-
-
-
-
-
-
-
-
